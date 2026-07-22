@@ -101,7 +101,7 @@ async function testI(){clr();$("btnT").disabled=true;try{lg("→ /future-markets
 async function scan(){clr();$("res").innerHTML="";$("btn").disabled=true;$("btnT").disabled=true;try{await mk();var v=$("vn").value,bs=$("uni").value.split(/[\s,]+/).filter(Boolean),iv=$("iv").value,is=ivS(iv),to=nowS(),fr=to-Math.max(+$("lb").value,7)*86400;
 var R=[],i;for(i=0;i<bs.length;i++){var s=rs(bs[i],v);if(s)R.push({b:bs[i],s:s});else lg("· "+bs[i]+" absent","a")}
 var CAP=+$("topn").value||80;if(R.length>CAP){lg("· univers plafonné à "+CAP+" (Top N) pour rester sous la limite","a");R=R.slice(0,CAP)}lg("Résolus "+R.length+"/"+bs.length,"g");if(!R.length){$("btn").disabled=false;$("btnT").disabled=false;return}
-var BATCH=25,DLY=R.length>60?4000:1500,minv=+$("mv").value||0;var all=[];for(i=0;i<R.length;i+=BATCH){var g=R.slice(i,i+BATCH);lg("→ batch "+(i/BATCH+1)+"/"+Math.ceil(R.length/BATCH),"a");var B;try{B=await fb(g.map(function(x){return x.s}),iv,fr,to)}catch(e){lg("✗ "+(e.m||e),"e");continue}
+var BATCH=8,DLY=R.length>50?7000:1500,minv=+$("mv").value||0;var all=[];for(i=0;i<R.length;i+=BATCH){var g=R.slice(i,i+BATCH);lg("→ batch "+(i/BATCH+1)+"/"+Math.ceil(R.length/BATCH),"a");var B;try{B=await fb(g.map(function(x){return x.s}),iv,fr,to)}catch(e){lg("✗ "+(e.m||e),"e");continue}
 for(var j=0;j<g.length;j++){var c=cc(g[j].s,B,is);if(c){c.base=g[j].b;c.venue=VN[v];all.push(c)}}
 if(i+BATCH<R.length)await new Promise(function(r){setTimeout(r,DLY)})}
 var bk={momentum:[],squeeze:[],accum:[],reversal:[]};for(i=0;i<all.length;i++){for(var k in SU){var pr=ps(k,all[i]),m=dm(k,all[i]),d=dst(m,is);if((c.vol24>=minv)&&(pr.p||d.en>=2||d.cu>=2))bk[k].push({c:all[i],pr:pr,m:m,d:d,sc:rsc(k,all[i])})}}
